@@ -1,23 +1,33 @@
+#include "config.h"
+#include "dict.h"
 #include "raylib.h"
+#include "word.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define FRAMES_PER_SEC 60
-
-static const char *WINDOW_TITLE = "typespeed";
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main(void) {
+  Dict *dict = dict_load(WORDLIST_FILE, 10000);
+
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
   SetTargetFPS(FRAMES_PER_SEC);
 
+  size_t words_size = 20;
+  Word *words = words_create(dict, words_size);
+
   while (!WindowShouldClose()) {
+    words_update(words);
+
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    DrawText("This is the Raylib window", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-             12, LIGHTGRAY);
+    words_draw(words);
     EndDrawing();
   }
 
   CloseWindow();
+  words_free(words);
+  dict_free(dict);
+
   return 0;
 }

@@ -1,11 +1,21 @@
 CC=clang
-CFLAGS= -Wall -Wextra -Werror -g
+CFLAGS=-Wall -Wextra -g
 FRAMEWORKS=-framework IOKit -framework Cocoa
-LIBS=
+LIBS=libraylib.a
 
-all: main.c
-	$(CC) $(CFLAGS) $(FRAMEWORKS) $(LIBS) -o main main.c libraylib.a
+SOURCES=$(wildcard *.c)
+OBJECTS=$(SOURCES:.c=.o)
+TARGET=main
 
-.PHONY: clean
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) $(FRAMEWORKS) $(LIBS) $^ -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -rf main main.dSYM
+	rm -rf $(OBJECTS) $(TARGET) main.dSYM
+
+.PHONY: all clean
