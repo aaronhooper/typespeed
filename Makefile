@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS= -Wall -Werror -g
+CFLAGS= -Wall -Wextra -Werror -g
 FRAMEWORKS=-framework IOKit -framework Cocoa
 LIBS=
 
