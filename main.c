@@ -11,6 +11,22 @@ void fps_draw() {
   DrawText(buffer, 0, 0, 16, GRAY);
 }
 
+void typed_word_push(char *typed_word, char key) {
+  int len = strlen(typed_word);
+  typed_word[len] = key;
+  typed_word[len + 1] = '\0';
+}
+
+void typed_word_pop(char *typed_word) {
+  int len = strlen(typed_word);
+
+  if (len != 0) {
+    typed_word[len - 1] = '\0';
+  }
+}
+
+void typed_word_clear(char *typed_word) { typed_word[0] = '\0'; }
+
 int main(void) {
   Dict *dict = dict_load(WORDLIST_FILE, 10000);
 
@@ -22,25 +38,18 @@ int main(void) {
   char typed_word[MAX_WORD_LENGTH] = "";
 
   while (!WindowShouldClose()) {
-    // update typed word
     for (int keycode = KEY_A; keycode <= KEY_Z; ++keycode) {
       if (IsKeyPressed(keycode)) {
-        char key_lowercase = (char)keycode + 32;
-        int len = strlen(typed_word);
-        typed_word[len] = key_lowercase;
-        typed_word[len + 1] = '\0';
+        typed_word_push(typed_word, (char)keycode + 32);
 
         if (words_remove(words, typed_word)) {
-          typed_word[0] = '\0';
+          typed_word_clear(typed_word);
+          break;
         }
       }
     }
     if (IsKeyPressed(KEY_BACKSPACE)) {
-      int len = strlen(typed_word);
-
-      if (len != 0) {
-        typed_word[len - 1] = '\0';
-      }
+      typed_word_pop(typed_word);
     }
 
     words_update(words);
