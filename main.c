@@ -53,17 +53,17 @@ int main(void) {
   char typed_word[MAX_WORD_LENGTH] = "";
 
   while (!WindowShouldClose()) {
-    for (int keycode = KEY_A; keycode <= KEY_Z; ++keycode) {
-      if (IsKeyPressed(keycode)) {
-        typed_word_push(typed_word, (char)keycode + 32);
+    int keycode = GetKeyPressed();
 
-        if (words_remove(&words, typed_word)) {
-          typed_word_clear(typed_word);
-          break;
-        }
+    if (KEY_A <= keycode && keycode <= KEY_Z) {
+      typed_word_push(typed_word, (char)keycode + 32);
+
+      if (words_remove(&words, typed_word)) {
+        typed_word_clear(typed_word);
       }
     }
-    if (IsKeyPressed(KEY_BACKSPACE)) {
+
+    if (keycode == KEY_BACKSPACE) {
       typed_word_pop(typed_word);
     }
 
