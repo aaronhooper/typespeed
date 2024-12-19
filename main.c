@@ -30,16 +30,8 @@ int main(void) {
         typed_word[len] = key_lowercase;
         typed_word[len + 1] = '\0';
 
-        // check typed word against words on screen
-        Word *curr = words;
-        while (curr != NULL) {
-          if (word_check(curr, typed_word)) {
-            words = words_remove(words, typed_word);
-            typed_word[0] = '\0';
-            break;
-          }
-
-          curr = curr->next;
+        if (words_remove(words, typed_word)) {
+          typed_word[0] = '\0';
         }
       }
     }

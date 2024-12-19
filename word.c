@@ -24,15 +24,6 @@ Word *word_create_random(Dict *dict) {
   return word_create(rand_word, rand_x, rand_y);
 }
 
-bool word_check(Word *word, const char *typed_word) {
-  // TODO: refactor
-  if (strncmp(typed_word, word->text, MAX_WORD_LENGTH) == 0) {
-    return true;
-  }
-
-  return false;
-}
-
 Word *words_create(Dict *dict, int n) {
   Word *head = word_create_random(dict);
   Word *curr = head;
@@ -63,7 +54,7 @@ Word *words_add_random(Word *word, Dict *dict) {
   return new;
 }
 
-Word *words_remove(Word *word, const char *match) {
+bool words_remove(Word *word, const char *match) {
   Word *head = word, *curr = word, *prev;
   size_t i = 0;
 
@@ -72,13 +63,15 @@ Word *words_remove(Word *word, const char *match) {
 
     if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0 && i == 0) {
       free(curr);
-      return next;
+      word = next;
+      return true;
     }
 
     if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0) {
       prev->next = next;
       free(curr);
-      return head;
+      word = head;
+      return true;
     }
 
     ++i;
@@ -86,7 +79,8 @@ Word *words_remove(Word *word, const char *match) {
     curr = next;
   }
 
-  return head;
+  word = head;
+  return false;
 }
 
 void words_update(Word *words) {
