@@ -49,7 +49,11 @@ int main(void) {
     ClearBackground(RAYWHITE);
     words_draw(words);
     DrawText(typed_word, 0, SCREEN_HEIGHT - 24, 24, GRAY); // draw typed word
+
+#ifdef _DEBUG
     fps_draw();
+#endif
+
     EndDrawing();
   }
 
