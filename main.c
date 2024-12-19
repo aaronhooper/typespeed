@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-void draw_fps_counter() {
+void fps_draw() {
   char buffer[15];
   snprintf(buffer, sizeof(buffer), "FPS: %d", GetFPS());
   DrawText(buffer, 0, 0, 16, GRAY);
@@ -25,7 +25,7 @@ int main(void) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     words_draw(words);
-    draw_fps_counter();
+    fps_draw();
     EndDrawing();
   }
 
