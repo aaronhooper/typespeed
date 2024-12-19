@@ -42,12 +42,20 @@ size_t words_len(Word *words) {
   return len;
 }
 
-int main(void) {
-  Dict *dict = dict_load(WORDLIST_FILE, 10000);
+const char *to_bool_string(int b) {
+  static const char *true_s = "true";
+  static const char *false_s = "false";
+  return b == 0 ? true_s : false_s;
+}
 
+int main(void) {
+  InitAudioDevice();
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
   SetTargetFPS(FRAMES_PER_SEC);
 
+  Wave word_matched_wav = LoadWave("word_matched.wav");
+  Sound word_matched = LoadSoundFromWave(word_matched_wav);
+  Dict *dict = dict_load(WORDLIST_FILE, 10000);
   size_t words_size = 20;
   Word *words = words_create(dict, words_size);
   char typed_word[MAX_WORD_LENGTH] = "";
@@ -59,6 +67,7 @@ int main(void) {
       typed_word_push(typed_word, (char)keycode + 32);
 
       if (words_remove(&words, typed_word)) {
+        PlaySound(word_matched);
         typed_word_clear(typed_word);
       }
     }
@@ -82,6 +91,7 @@ int main(void) {
   }
 
   CloseWindow();
+  CloseAudioDevice();
 
   words_free(words);
   dict_free(dict);
