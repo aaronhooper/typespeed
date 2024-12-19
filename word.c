@@ -54,39 +54,42 @@ Word *words_add_random(Word *word, Dict *dict) {
   return new;
 }
 
-bool words_remove(Word *word, const char *match) {
-  Word *head = word, *curr = word, *prev;
+bool words_remove(Word **word, const char *match) {
+  Word *head = *word, *curr = *word, *prev;
+  bool is_match = strncmp(curr->text, match, MAX_WORD_LENGTH) == 0;
   size_t i = 0;
 
-  while (curr != NULL) {
-    Word *next = curr->next;
-
-    if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0 && i == 0) {
-      free(curr);
-      word = next;
-      return true;
-    }
-
-    if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0) {
-      prev->next = next;
-      free(curr);
-      word = head;
-      return true;
-    }
-
-    ++i;
-    prev = curr;
-    curr = next;
+  if (is_match) {
+    *word = curr->next;
+    free(curr);
+    return true;
   }
 
-  word = head;
+  while (curr->next != NULL) {
+    ++i;
+    prev = curr;
+    curr = curr->next;
+    is_match = strncmp(curr->text, match, MAX_WORD_LENGTH) == 0;
+
+    if (is_match) {
+      prev->next = curr->next;
+      *word = head;
+      free(curr);
+      return true;
+    }
+  }
+
+  *word = head;
   return false;
 }
 
 void words_update(Word *words) {
   float dt = GetFrameTime();
-  for (Word *curr = words; curr != NULL; curr = curr->next) {
+  Word *curr = words;
+
+  while (curr != NULL) {
     curr->pos.y = curr->pos.y + 1 * dt;
+    curr = curr->next;
   }
 }
 

@@ -19,7 +19,7 @@ void word_print(Word *word);
 
 Word *words_create(Dict *dict, int n);
 Word *words_add_random(Word *word, Dict *dict);
-bool words_remove(Word *word, const char *match);
+bool words_remove(Word **word, const char *match);
 void words_free(Word *head);
 void words_update(Word *words);
 void words_draw(Word *words);

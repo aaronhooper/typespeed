@@ -25,7 +25,22 @@ void typed_word_pop(char *typed_word) {
   }
 }
 
-void typed_word_clear(char *typed_word) { typed_word[0] = '\0'; }
+void typed_word_clear(char *typed_word) {
+  memset(typed_word, 0, strlen(typed_word));
+  typed_word[0] = '\0';
+}
+
+size_t words_len(Word *words) {
+  Word *curr = words;
+  size_t len = 0;
+
+  while (curr != NULL) {
+    len++;
+    curr = curr->next;
+  }
+
+  return len;
+}
 
 int main(void) {
   Dict *dict = dict_load(WORDLIST_FILE, 10000);
@@ -42,7 +57,7 @@ int main(void) {
       if (IsKeyPressed(keycode)) {
         typed_word_push(typed_word, (char)keycode + 32);
 
-        if (words_remove(words, typed_word)) {
+        if (words_remove(&words, typed_word)) {
           typed_word_clear(typed_word);
           break;
         }
