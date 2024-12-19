@@ -57,7 +57,6 @@ Word *words_add_random(Word *word, Dict *dict) {
 bool words_remove(Word **word, const char *match) {
   Word *head = *word, *curr = *word, *prev;
   bool is_match = strncmp(curr->text, match, MAX_WORD_LENGTH) == 0;
-  size_t i = 0;
 
   if (is_match) {
     *word = curr->next;
@@ -66,7 +65,6 @@ bool words_remove(Word **word, const char *match) {
   }
 
   while (curr->next != NULL) {
-    ++i;
     prev = curr;
     curr = curr->next;
     is_match = strncmp(curr->text, match, MAX_WORD_LENGTH) == 0;
