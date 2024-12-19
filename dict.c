@@ -31,6 +31,7 @@ Dict *dict_load(const char *filename, size_t n) {
   }
 
   fclose(fp);
+
   return dict;
 }
 

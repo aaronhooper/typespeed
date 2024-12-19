@@ -1,8 +1,10 @@
 #include "word.h"
 #include "config.h"
+#include "raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Word *word_create(char *text, float x, float y) {
   Word *word = malloc(sizeof(Word));
@@ -20,6 +22,15 @@ Word *word_create_random(Dict *dict) {
   float rand_y = GetRandomValue(0, SCREEN_HEIGHT);
 
   return word_create(rand_word, rand_x, rand_y);
+}
+
+bool word_check(Word *word, const char *typed_word) {
+  // TODO: refactor
+  if (strncmp(typed_word, word->text, MAX_WORD_LENGTH) == 0) {
+    return true;
+  }
+
+  return false;
 }
 
 Word *words_create(Dict *dict, int n) {
@@ -45,9 +56,43 @@ void words_free(Word *head) {
   }
 }
 
+Word *words_add_random(Word *word, Dict *dict) {
+  Word *new = word_create_random(dict);
+  new->next = word;
+
+  return new;
+}
+
+Word *words_remove(Word *word, const char *match) {
+  Word *head = word, *curr = word, *prev;
+  size_t i = 0;
+
+  while (curr != NULL) {
+    Word *next = curr->next;
+
+    if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0 && i == 0) {
+      free(curr);
+      return next;
+    }
+
+    if (strncmp(curr->text, match, MAX_WORD_LENGTH) == 0) {
+      prev->next = next;
+      free(curr);
+      return head;
+    }
+
+    ++i;
+    prev = curr;
+    curr = next;
+  }
+
+  return head;
+}
+
 void words_update(Word *words) {
+  float dt = GetFrameTime();
   for (Word *curr = words; curr != NULL; curr = curr->next) {
-    curr->pos.y = curr->pos.y + 1;
+    curr->pos.y = curr->pos.y + 1 * dt;
   }
 }
 
