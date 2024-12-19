@@ -1,11 +1,8 @@
 #include "config.h"
-#include "dict.h"
 #include "raylib.h"
 #include "word.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void draw_fps_counter() {
   char buffer[15];

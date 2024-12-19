@@ -1,11 +1,8 @@
 #include "word.h"
 #include "config.h"
-#include "dict.h"
-#include "raylib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 Word *word_create(char *text, float x, float y) {
   Word *word = malloc(sizeof(Word));
