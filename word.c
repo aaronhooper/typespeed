@@ -93,7 +93,7 @@ void words_update(Word *words) {
 
 void words_draw(Word *words) {
   for (Word *curr = words; curr != NULL; curr = curr->next) {
-    DrawText(curr->text, curr->pos.x, curr->pos.y, 24, GRAY);
+    DrawText(curr->text, curr->pos.x, curr->pos.y, 24, RAYWHITE);
   }
 }
 

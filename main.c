@@ -30,6 +30,10 @@ void typed_word_clear(char *typed_word) {
   typed_word[0] = '\0';
 }
 
+void typed_word_draw(const char *typed_word) {
+  DrawText(typed_word, 0, SCREEN_HEIGHT - 24, 24, RAYWHITE);
+}
+
 size_t words_len(Word *words) {
   Word *curr = words;
   size_t len = 0;
@@ -79,9 +83,9 @@ int main(void) {
     words_update(words);
 
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
     words_draw(words);
-    DrawText(typed_word, 0, SCREEN_HEIGHT - 24, 24, GRAY); // draw typed word
+    typed_word_draw(typed_word);
 
 #ifdef _DEBUG
     fps_draw();
