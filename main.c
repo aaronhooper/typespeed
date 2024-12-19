@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+void draw_fps_counter() {
+  char buffer[15];
+  snprintf(buffer, sizeof(buffer), "FPS: %d", GetFPS());
+  DrawText(buffer, 0, 0, 16, GRAY);
+}
+
 int main(void) {
   Dict *dict = dict_load(WORDLIST_FILE, 10000);
 
@@ -22,6 +28,7 @@ int main(void) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     words_draw(words);
+    draw_fps_counter();
     EndDrawing();
   }
 
