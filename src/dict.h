@@ -4,10 +4,9 @@
 
 typedef struct {
   size_t size;
-  size_t capacity;
-  char *ptr;
-  char *words[];
+  char *buffer;
+  char **words;
 } Dict;
 
-Dict *dict_load(const char *filename, size_t n);
+Dict dict_load(const char *filename);
 void dict_free(Dict *dict);

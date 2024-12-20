@@ -60,9 +60,9 @@ int main(void) {
 
   Wave word_matched_wav = LoadWave("assets/word_matched.wav");
   Sound word_matched = LoadSoundFromWave(word_matched_wav);
-  Dict *dict = dict_load(WORDLIST_FILE, 10000);
+  Dict dict = dict_load(WORDLIST_FILE);
   size_t words_size = 20;
-  Word *words = words_create(dict, words_size);
+  Word *words = words_create(&dict, words_size);
   char typed_word[MAX_WORD_LENGTH] = "";
   int score = 0;
 
@@ -102,7 +102,7 @@ int main(void) {
   CloseAudioDevice();
 
   words_free(words);
-  dict_free(dict);
+  dict_free(&dict);
 
   return 0;
 }
