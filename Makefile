@@ -1,21 +1,24 @@
 CC=clang
 CFLAGS=-Wall -Wextra -g
-FRAMEWORKS=-framework IOKit -framework Cocoa
-LIBS=libraylib.a
+INCLUDES=-Iinclude
+LIBS=-framework IOKit -framework Cocoa -Llib -lraylib
 
-SOURCES=$(wildcard *.c)
-OBJECTS=$(SOURCES:.c=.o)
-TARGET=main
-
-all: $(TARGET)
+SRC_DIR=src
+BUILD_DIR=build
+SOURCES=$(wildcard $(SRC_DIR)/*.c)
+OBJECTS=$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
+TARGET=$(BUILD_DIR)/typespeed
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(FRAMEWORKS) $(LIBS) $^ -o $@
+	$(CC) $(CFLAGS) $(LIBS) $^ -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+$(BUILD_DIR):
+	mkdir -p $@
+	cp -r assets $(BUILD_DIR)
+
+.PHONY: clean
 clean:
-	rm -rf $(OBJECTS) $(TARGET) main.dSYM
-
-.PHONY: all clean
+	rm -rf build *.dSYM .cache

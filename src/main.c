@@ -58,7 +58,7 @@ int main(void) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
   SetTargetFPS(FRAMES_PER_SEC);
 
-  Wave word_matched_wav = LoadWave("word_matched.wav");
+  Wave word_matched_wav = LoadWave("assets/word_matched.wav");
   Sound word_matched = LoadSoundFromWave(word_matched_wav);
   Dict *dict = dict_load(WORDLIST_FILE, 10000);
   size_t words_size = 20;

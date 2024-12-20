@@ -17,5 +17,5 @@
 #define BATTLESHIP_GRAY CLITERAL(Color){ 153, 153, 153, 255 }
 
 static const char *WINDOW_TITLE = "typespeed";
-static const char *WORDLIST_FILE = "google-10000-english.txt";
+static const char *WORDLIST_FILE = "assets/google-10000-english.txt";
 
