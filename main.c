@@ -46,6 +46,13 @@ size_t words_len(Word *words) {
   return len;
 }
 
+void score_draw(int score) {
+  const size_t text_len = 18;
+  char text[text_len];
+  snprintf(text, text_len, "Score: %d", score);
+  DrawText(text, 0, 0, 24, RAYWHITE);
+}
+
 int main(void) {
   InitAudioDevice();
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
@@ -57,6 +64,7 @@ int main(void) {
   size_t words_size = 20;
   Word *words = words_create(dict, words_size);
   char typed_word[MAX_WORD_LENGTH] = "";
+  int score = 0;
 
   while (!WindowShouldClose()) {
     int keycode = GetKeyPressed();
@@ -67,6 +75,7 @@ int main(void) {
       if (words_remove(&words, typed_word)) {
         PlaySound(word_matched);
         typed_word_clear(typed_word);
+        ++score;
       }
     }
 
@@ -80,6 +89,7 @@ int main(void) {
     ClearBackground(BLACK);
     words_draw(words);
     typed_word_draw(typed_word);
+    score_draw(score);
 
 #ifdef _DEBUG
     fps_draw();
