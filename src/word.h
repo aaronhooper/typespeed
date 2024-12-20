@@ -24,3 +24,4 @@ void words_free(Word *head);
 void words_update(Word *words);
 void words_draw(Word *words);
 void words_foreach(Word *words, void (*fn)(Word *));
+size_t words_len(Word *words);

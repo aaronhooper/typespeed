@@ -1,5 +1,8 @@
 #include "util.h"
+#include "config.h"
+#include "raylib.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -39,4 +42,17 @@ char **split(char *str, size_t *size) {
   *size = pointers_size;
 
   return pointers;
+}
+
+void fps_draw() {
+  char buffer[15];
+  snprintf(buffer, sizeof(buffer), "FPS: %d", GetFPS());
+  DrawText(buffer, 0, 0, 16, GRAY);
+}
+
+void score_draw(int score) {
+  const size_t len = 18;
+  char text[len];
+  snprintf(text, len, "Score: %d", score);
+  DrawText(text, 0, 0, 24, BATTLESHIP_GRAY);
 }

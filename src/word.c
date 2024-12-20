@@ -107,3 +107,15 @@ void words_foreach(Word *words, void (*fn)(Word *)) {
 }
 
 void word_print(Word *word) { printf("%s\n", word->text); }
+
+size_t words_len(Word *words) {
+  Word *curr = words;
+  size_t len = 0;
+
+  while (curr != NULL) {
+    len++;
+    curr = curr->next;
+  }
+
+  return len;
+}
