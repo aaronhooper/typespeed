@@ -47,9 +47,9 @@ size_t words_len(Word *words) {
 }
 
 void score_draw(int score) {
-  const size_t text_len = 18;
-  char text[text_len];
-  snprintf(text, text_len, "Score: %d", score);
+  const size_t len = 18;
+  char text[len];
+  snprintf(text, len, "Score: %d", score);
   DrawText(text, 0, 0, 24, BATTLESHIP_GRAY);
 }
 
