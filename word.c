@@ -2,6 +2,7 @@
 #include "config.h"
 #include "raylib.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +26,8 @@ Word *word_create_random(Dict *dict) {
 }
 
 Word *words_create(Dict *dict, int n) {
+  assert(n > 0);
+
   Word *head = word_create_random(dict);
   Word *curr = head;
 

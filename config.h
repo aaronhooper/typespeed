@@ -4,6 +4,10 @@
 
 //#define _DEBUG
 
+#ifndef _DEBUG
+#define NDEBUG
+#endif
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define FRAMES_PER_SEC 120
