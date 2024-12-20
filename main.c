@@ -46,12 +46,6 @@ size_t words_len(Word *words) {
   return len;
 }
 
-const char *to_bool_string(int b) {
-  static const char *true_s = "true";
-  static const char *false_s = "false";
-  return b == 0 ? true_s : false_s;
-}
-
 int main(void) {
   InitAudioDevice();
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
