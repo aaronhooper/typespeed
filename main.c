@@ -50,7 +50,7 @@ void score_draw(int score) {
   const size_t text_len = 18;
   char text[text_len];
   snprintf(text, text_len, "Score: %d", score);
-  DrawText(text, 0, 0, 24, RAYWHITE);
+  DrawText(text, 0, 0, 24, BATTLESHIP_GRAY);
 }
 
 int main(void) {
@@ -86,7 +86,7 @@ int main(void) {
     words_update(words);
 
     BeginDrawing();
-    ClearBackground(BLACK);
+    ClearBackground(LIQUORICE);
     words_draw(words);
     typed_word_draw(typed_word);
     score_draw(score);
