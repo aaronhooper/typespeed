@@ -28,10 +28,10 @@ char **split(char *str, size_t *size) {
   char **pointers = malloc((n_newlines + 1) * sizeof(char **));
 
   // set first pointer to beginning of wordlist
-  pointers[0] = &str[0];
+  pointers[0] = str;
   size_t pointers_size = 1;
 
-  // set subsequent pointers to points after null chars
+  // set pointers to the address after the null char
   for (size_t i = 0; i < len; ++i) {
     if (str[i] == '\0') {
       pointers[pointers_size] = &str[i + 1];
