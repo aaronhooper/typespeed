@@ -31,7 +31,7 @@ typedef struct SceneMainObject {
   int title_font_size;
   int title_x;
   int title_y;
-  PlayButton play_button;
+  PlayButton *play_button;
 } SceneMainObject;
 
 void scene_set(Scene scene);

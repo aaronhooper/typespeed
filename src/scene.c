@@ -14,6 +14,39 @@ static void *_scene_object;
 
 Scene scene_get() { return _scene_type; }
 
+PlayButton *play_button_create() {
+  PlayButton *button = malloc(sizeof(PlayButton));
+
+  int screen_center_x = SCREEN_WIDTH / 2;
+  int screen_center_y = SCREEN_HEIGHT / 2;
+
+  // set the text top left position to title font size
+  int play_button_x = screen_center_x;
+  int play_button_y = screen_center_y;
+
+  button->text = "play";
+  button->font_size = 36;
+
+  // subtract text midpoint from x and y pos of text to
+  // get the centered position
+  int play_button_width = MeasureText(button->text, button->font_size);
+  int play_button_height = button->font_size;
+  play_button_x = play_button_x - (play_button_width / 2);
+  play_button_y = play_button_y - (play_button_height / 2);
+
+  // move button down
+  play_button_y += 100;
+
+  button->x = play_button_x;
+  button->y = play_button_y;
+  button->color.r = 0xff;
+  button->color.g = 0xff;
+  button->color.b = 0xff;
+  button->color.a = 0xff - 0xff / 4;
+
+  return button;
+}
+
 SceneMainObject *scene_main_create() {
   SceneMainObject *object = malloc(sizeof(SceneMainObject));
   object->title_text = WINDOW_TITLE;
@@ -38,31 +71,7 @@ SceneMainObject *scene_main_create() {
   object->title_x = title_x;
   object->title_y = title_y;
 
-  // PLAY BUTTON
-  // set the text top left position to title font size
-  int play_button_x = screen_center_x;
-  int play_button_y = screen_center_y;
-
-  object->play_button.text = "play";
-  object->play_button.font_size = 36;
-
-  // subtract text midpoint from x and y pos of text to
-  // get the centered position
-  int play_button_width =
-      MeasureText(object->play_button.text, object->play_button.font_size);
-  int play_button_height = object->play_button.font_size;
-  play_button_x = play_button_x - (play_button_width / 2);
-  play_button_y = play_button_y - (play_button_height / 2);
-
-  // move button down
-  play_button_y += 100;
-
-  object->play_button.x = play_button_x;
-  object->play_button.y = play_button_y;
-  object->play_button.color.r = 0xff;
-  object->play_button.color.g = 0xff;
-  object->play_button.color.b = 0xff;
-  object->play_button.color.a = 0xff - 0xff / 4;
+  object->play_button = play_button_create();
 
   return object;
 }
@@ -81,7 +90,12 @@ SceneGameplayObject *scene_gameplay_create() {
   return object;
 }
 
-void scene_main_free(SceneMainObject *object) { free(object); }
+void play_button_free(PlayButton *button) { free(button); }
+
+void scene_main_free(SceneMainObject *object) {
+  play_button_free(object->play_button);
+  free(object);
+}
 
 void scene_gameplay_free(SceneGameplayObject *object) {
   free(object->player_input);
@@ -147,13 +161,11 @@ void scene_gameplay_update(SceneGameplayObject *scene) {
   words_update(scene->words);
 }
 
-void scene_main_update(SceneMainObject *scene) {
-  int xstart = scene->play_button.x;
-  int xend =
-      MeasureText(scene->play_button.text, scene->play_button.font_size) +
-      SCREEN_WIDTH;
-  int ystart = scene->play_button.y;
-  int yend = scene->play_button.font_size + SCREEN_HEIGHT;
+void play_button_update(PlayButton *button) {
+  int xstart = button->x;
+  int xend = MeasureText(button->text, button->font_size) + SCREEN_WIDTH;
+  int ystart = button->y;
+  int yend = button->font_size + SCREEN_HEIGHT;
   int mousex = GetMouseX();
   int mousey = GetMouseY();
 
@@ -161,14 +173,18 @@ void scene_main_update(SceneMainObject *scene) {
   bool is_within_y = ystart < mousey && mousey < yend;
 
   if (is_within_x && is_within_y) {
-    scene->play_button.color.a = 0xff;
+    button->color.a = 0xff;
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
       scene_set(SCENE_GAMEPLAY);
     }
   } else {
-    scene->play_button.color.a = 0xff - 0xff / 4;
+    button->color.a = 0xff - 0xff / 4;
   }
+}
+
+void scene_main_update(SceneMainObject *scene) {
+  play_button_update(scene->play_button);
 }
 
 void scene_gameplay_draw(SceneGameplayObject *scene) {
@@ -177,11 +193,15 @@ void scene_gameplay_draw(SceneGameplayObject *scene) {
   score_draw(scene->score);
 }
 
+void play_button_draw(PlayButton *button) {
+  DrawText(button->text, button->x, button->y, button->font_size,
+           button->color);
+}
+
 void scene_main_draw(SceneMainObject *scene) {
   DrawText(scene->title_text, scene->title_x, scene->title_y,
            scene->title_font_size, RAYWHITE);
-  DrawText(scene->play_button.text, scene->play_button.x, scene->play_button.y,
-           scene->play_button.font_size, scene->play_button.color);
+  play_button_draw(scene->play_button);
 }
 
 void scene_update() {
