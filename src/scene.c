@@ -144,7 +144,23 @@ void scene_gameplay_update(SceneGameplayObject *scene) {
   words_update(scene->words);
 }
 
-void scene_main_update(SceneMainObject *scene) {}
+void scene_main_update(SceneMainObject *scene) {
+  int xstart = scene->play_button_x;
+  int xend =
+      MeasureText(scene->play_button_text, scene->play_button_font_size) +
+      SCREEN_WIDTH;
+  int ystart = scene->play_button_y;
+  int yend = scene->play_button_font_size + SCREEN_HEIGHT;
+  int mousex = GetMouseX();
+  int mousey = GetMouseY();
+
+  bool is_within_x = xstart < mousex && mousex < xend;
+  bool is_within_y = ystart < mousey && mousey < yend;
+
+  if (is_within_x && is_within_y && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    scene_set(SCENE_GAMEPLAY);
+  }
+}
 
 void scene_gameplay_draw(SceneGameplayObject *scene) {
   words_draw(scene->words);
