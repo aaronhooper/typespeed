@@ -18,6 +18,13 @@ typedef struct SceneGameplayObject {
   int score;
 } SceneGameplayObject;
 
+typedef struct Title {
+  const char *text;
+  int font_size;
+  int x;
+  int y;
+} Title;
+
 typedef struct PlayButton {
   const char *text;
   int font_size;
@@ -27,10 +34,7 @@ typedef struct PlayButton {
 } PlayButton;
 
 typedef struct SceneMainObject {
-  const char *title_text;
-  int title_font_size;
-  int title_x;
-  int title_y;
+  Title *title;
   PlayButton *play_button;
 } SceneMainObject;
 
