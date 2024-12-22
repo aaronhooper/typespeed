@@ -97,7 +97,9 @@ void scene_free(Scene scene) {
     break;
   case SCENE_GAMEPLAY:
     scene_gameplay_free(_scene_object);
+    break;
   case SCENE_NULL:
+  default:
     break;
   }
 }
@@ -117,6 +119,7 @@ void scene_set(Scene scene) {
     _scene_object = scene_gameplay_create();
     break;
   case SCENE_NULL:
+  default:
     break;
   }
 }
