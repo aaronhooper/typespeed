@@ -9,4 +9,4 @@ typedef struct {
 } Dict;
 
 Dict dict_load(const char *filename);
-void dict_free(Dict *dict);
+void dict_free(Dict dict);

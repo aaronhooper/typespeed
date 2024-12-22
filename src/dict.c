@@ -20,8 +20,8 @@ Dict dict_load(const char *filename) {
   return dict;
 }
 
-void dict_free(Dict *dict) {
-  free(dict->words);
-  UnloadFileText(dict->buffer);
-  memset(dict, 0, sizeof(Dict));
+void dict_free(Dict dict) {
+  free(dict.words);
+  dict.words = NULL;
+  UnloadFileText(dict.buffer);
 }

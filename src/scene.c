@@ -85,7 +85,7 @@ void scene_gameplay_free(SceneGameplayObject *object) {
   words_free(object->words);
   UnloadSound(object->word_matched);
   UnloadWave(object->word_matched_wav);
-  dict_free(&object->dict);
+  dict_free(object->dict);
   free(object);
   object = NULL;
 }
