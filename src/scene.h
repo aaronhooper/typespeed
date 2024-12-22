@@ -18,16 +18,20 @@ typedef struct SceneGameplayObject {
   int score;
 } SceneGameplayObject;
 
+typedef struct PlayButton {
+  const char *text;
+  int font_size;
+  Color color;
+  int x;
+  int y;
+} PlayButton;
+
 typedef struct SceneMainObject {
   const char *title_text;
   int title_font_size;
   int title_x;
   int title_y;
-  const char *play_button_text;
-  int play_button_font_size;
-  unsigned char play_button_opacity;
-  int play_button_x;
-  int play_button_y;
+  PlayButton play_button;
 } SceneMainObject;
 
 void scene_set(Scene scene);

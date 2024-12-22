@@ -43,23 +43,26 @@ SceneMainObject *scene_main_create() {
   int play_button_x = screen_center_x;
   int play_button_y = screen_center_y;
 
-  object->play_button_text = "play";
-  object->play_button_font_size = 36;
+  object->play_button.text = "play";
+  object->play_button.font_size = 36;
 
   // subtract text midpoint from x and y pos of text to
   // get the centered position
   int play_button_width =
-      MeasureText(object->play_button_text, object->play_button_font_size);
-  int play_button_height = object->play_button_font_size;
+      MeasureText(object->play_button.text, object->play_button.font_size);
+  int play_button_height = object->play_button.font_size;
   play_button_x = play_button_x - (play_button_width / 2);
   play_button_y = play_button_y - (play_button_height / 2);
 
   // move button down
   play_button_y += 100;
 
-  object->play_button_x = play_button_x;
-  object->play_button_y = play_button_y;
-  object->play_button_opacity = 0xff - 0xff / 4;
+  object->play_button.x = play_button_x;
+  object->play_button.y = play_button_y;
+  object->play_button.color.r = 0xff;
+  object->play_button.color.g = 0xff;
+  object->play_button.color.b = 0xff;
+  object->play_button.color.a = 0xff - 0xff / 4;
 
   return object;
 }
@@ -145,20 +148,26 @@ void scene_gameplay_update(SceneGameplayObject *scene) {
 }
 
 void scene_main_update(SceneMainObject *scene) {
-  int xstart = scene->play_button_x;
+  int xstart = scene->play_button.x;
   int xend =
-      MeasureText(scene->play_button_text, scene->play_button_font_size) +
+      MeasureText(scene->play_button.text, scene->play_button.font_size) +
       SCREEN_WIDTH;
-  int ystart = scene->play_button_y;
-  int yend = scene->play_button_font_size + SCREEN_HEIGHT;
+  int ystart = scene->play_button.y;
+  int yend = scene->play_button.font_size + SCREEN_HEIGHT;
   int mousex = GetMouseX();
   int mousey = GetMouseY();
 
   bool is_within_x = xstart < mousex && mousex < xend;
   bool is_within_y = ystart < mousey && mousey < yend;
 
-  if (is_within_x && is_within_y && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-    scene_set(SCENE_GAMEPLAY);
+  if (is_within_x && is_within_y) {
+    scene->play_button.color.a = 0xff;
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      scene_set(SCENE_GAMEPLAY);
+    }
+  } else {
+    scene->play_button.color.a = 0xff - 0xff / 4;
   }
 }
 
@@ -171,12 +180,8 @@ void scene_gameplay_draw(SceneGameplayObject *scene) {
 void scene_main_draw(SceneMainObject *scene) {
   DrawText(scene->title_text, scene->title_x, scene->title_y,
            scene->title_font_size, RAYWHITE);
-
-  // draw it
-  Color play_button_color = RAYWHITE;
-  play_button_color.a = scene->play_button_opacity;
-  DrawText(scene->play_button_text, scene->play_button_x, scene->play_button_y,
-           scene->play_button_font_size, play_button_color);
+  DrawText(scene->play_button.text, scene->play_button.x, scene->play_button.y,
+           scene->play_button.font_size, scene->play_button.color);
 }
 
 void scene_update() {
