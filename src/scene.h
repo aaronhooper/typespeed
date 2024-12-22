@@ -17,6 +17,11 @@ typedef struct SceneGameplayObject {
   int score;
 } SceneGameplayObject;
 
+typedef struct SceneMainObject {
+  const char *title;
+  int title_font_size;
+} SceneMainObject;
+
 void scene_set(Scene scene);
 void scene_update();
 void scene_draw();

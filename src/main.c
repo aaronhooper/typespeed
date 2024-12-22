@@ -7,7 +7,7 @@ int main(void) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
   SetTargetFPS(FRAMES_PER_SEC);
 
-  scene_set(SCENE_GAMEPLAY);
+  scene_set(SCENE_MAIN);
 
   while (!WindowShouldClose()) {
     scene_update();
@@ -25,6 +25,7 @@ int main(void) {
 
   CloseWindow();
   CloseAudioDevice();
+  scene_set(SCENE_NULL);
 
   return 0;
 }
