@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-//#define _DEBUG
+#define _DEBUG
 
 #ifndef _DEBUG
 #define NDEBUG

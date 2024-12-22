@@ -1,13 +1,14 @@
 #include "config.h"
 #include "raylib.h"
 #include "scene.h"
+#include "util.h"
 
 int main(void) {
   InitAudioDevice();
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
   SetTargetFPS(FRAMES_PER_SEC);
 
-  scene_set(SCENE_MAIN);
+  scene_set(SCENE_GAMEPLAY);
 
   while (!WindowShouldClose()) {
     scene_update();

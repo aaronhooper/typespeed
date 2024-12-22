@@ -47,7 +47,9 @@ char **split(char *str, size_t *size) {
 void fps_draw() {
   char buffer[15];
   snprintf(buffer, sizeof(buffer), "FPS: %d", GetFPS());
-  DrawText(buffer, 0, 0, 16, GRAY);
+  int font_size = 16;
+  int text_width = MeasureText(buffer, font_size);
+  DrawText(buffer, (SCREEN_WIDTH / 2) - (text_width / 2), 0, font_size, GRAY);
 }
 
 void score_draw(int score) {
