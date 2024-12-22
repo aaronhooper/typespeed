@@ -171,9 +171,9 @@ void scene_gameplay_update(SceneGameplayObject *scene) {
 
 void play_button_update(PlayButton *button) {
   int xstart = button->x;
-  int xend = MeasureText(button->text, button->font_size) + SCREEN_WIDTH;
+  int xend = MeasureText(button->text, button->font_size) + xstart;
   int ystart = button->y;
-  int yend = button->font_size + SCREEN_HEIGHT;
+  int yend = button->font_size + ystart;
   int mousex = GetMouseX();
   int mousey = GetMouseY();
 
