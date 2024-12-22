@@ -24,5 +24,5 @@ void player_input_clear(char *player_input) {
 }
 
 void player_input_draw(const char *player_input) {
-  DrawText(player_input, 0, SCREEN_HEIGHT - 24, 24, RAYWHITE);
+  DrawText(player_input, 0, GetScreenHeight() - 24, 24, RAYWHITE);
 }

@@ -49,7 +49,8 @@ void fps_draw() {
   snprintf(buffer, sizeof(buffer), "FPS: %d", GetFPS());
   int font_size = 16;
   int text_width = MeasureText(buffer, font_size);
-  DrawText(buffer, (SCREEN_WIDTH / 2) - (text_width / 2), 0, font_size, GRAY);
+  DrawText(buffer, (GetScreenWidth() / 2) - (text_width / 2), 0, font_size,
+           GRAY);
 }
 
 void score_draw(int score) {

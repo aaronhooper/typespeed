@@ -20,8 +20,8 @@ Title *title_create() {
   title->font_size = 48;
 
   // get center coords of screen
-  int screen_center_x = SCREEN_WIDTH / 2;
-  int screen_center_y = SCREEN_HEIGHT / 2;
+  int screen_center_x = GetScreenWidth() / 2;
+  int screen_center_y = GetScreenHeight() / 2;
 
   // set the text top left corner to the screen center
   int title_x = screen_center_x;
@@ -43,8 +43,8 @@ Title *title_create() {
 PlayButton *play_button_create() {
   PlayButton *button = malloc(sizeof(PlayButton));
 
-  int screen_center_x = SCREEN_WIDTH / 2;
-  int screen_center_y = SCREEN_HEIGHT / 2;
+  int screen_center_x = GetScreenWidth() / 2;
+  int screen_center_y = GetScreenHeight() / 2;
 
   // set the text top left position to title font size
   int play_button_x = screen_center_x;

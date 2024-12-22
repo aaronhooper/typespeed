@@ -19,8 +19,8 @@ Word *word_create(char *text, float x, float y) {
 
 Word *word_create_random(Dict *dict) {
   char *rand_word = dict->words[GetRandomValue(0, dict->size - 1)];
-  float rand_x = GetRandomValue(0, SCREEN_WIDTH);
-  float rand_y = GetRandomValue(0, SCREEN_HEIGHT);
+  float rand_x = GetRandomValue(0, GetScreenWidth());
+  float rand_y = GetRandomValue(0, GetScreenHeight());
 
   return word_create(rand_word, rand_x, rand_y);
 }
