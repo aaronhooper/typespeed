@@ -16,8 +16,50 @@ Scene scene_get() { return _scene_type; }
 
 SceneMainObject *scene_main_create() {
   SceneMainObject *object = malloc(sizeof(SceneMainObject));
-  object->title = WINDOW_TITLE;
+  object->title_text = WINDOW_TITLE;
   object->title_font_size = 48;
+
+  // TITLE
+  // get center coords of screen
+  int screen_center_x = SCREEN_WIDTH / 2;
+  int screen_center_y = SCREEN_HEIGHT / 2;
+
+  // set the text top left corner to the screen center
+  int title_x = screen_center_x;
+  int title_y = screen_center_y;
+
+  // subtract text midpoint from x and y pos of text to
+  // get the centered position
+  int title_width = MeasureText(object->title_text, object->title_font_size);
+  int title_height = object->title_font_size;
+  title_x = title_x - (title_width / 2);
+  title_y = title_y - (title_height / 2);
+
+  object->title_x = title_x;
+  object->title_y = title_y;
+
+  // PLAY BUTTON
+  // set the text top left position to title font size
+  int play_button_x = screen_center_x;
+  int play_button_y = screen_center_y;
+
+  object->play_button_text = "play";
+  object->play_button_font_size = 36;
+
+  // subtract text midpoint from x and y pos of text to
+  // get the centered position
+  int play_button_width =
+      MeasureText(object->play_button_text, object->play_button_font_size);
+  int play_button_height = object->play_button_font_size;
+  play_button_x = play_button_x - (play_button_width / 2);
+  play_button_y = play_button_y - (play_button_height / 2);
+
+  // move button down
+  play_button_y += 100;
+
+  object->play_button_x = play_button_x;
+  object->play_button_y = play_button_y;
+  object->play_button_opacity = 0xff - 0xff / 4;
 
   return object;
 }
@@ -108,22 +150,14 @@ void scene_gameplay_draw(SceneGameplayObject *scene) {
 }
 
 void scene_main_draw(SceneMainObject *scene) {
-  // get center coords of screen
-  int screen_center_x = SCREEN_WIDTH / 2;
-  int screen_center_y = SCREEN_HEIGHT / 2;
-
-  // set the text top left corner onto the screen center
-  int text_x = screen_center_x;
-  int text_y = screen_center_y;
-
-  // adjust x and y of text by the difference to center it on the screen
-  int text_width = MeasureText(scene->title, scene->title_font_size);
-  int text_height = scene->title_font_size;
-  text_x = text_x - (text_width / 2);
-  text_y = text_y - (text_height / 2);
+  DrawText(scene->title_text, scene->title_x, scene->title_y,
+           scene->title_font_size, RAYWHITE);
 
   // draw it
-  DrawText(scene->title, text_x, text_y, scene->title_font_size, RAYWHITE);
+  Color play_button_color = RAYWHITE;
+  play_button_color.a = scene->play_button_opacity;
+  DrawText(scene->play_button_text, scene->play_button_x, scene->play_button_y,
+           scene->play_button_font_size, play_button_color);
 }
 
 void scene_update() {
