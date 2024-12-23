@@ -1,5 +1,4 @@
 #include "player_input.h"
-#include "config.h"
 #include "raylib.h"
 
 #include <string.h>
