@@ -1,9 +1,10 @@
 #pragma once
 
 #include "../components/word.h"
+#include "player_input.h"
 
 typedef struct SceneGameplayObject {
-  char *player_input;
+  PlayerInput player_input;
   Word *words;
   Wave word_matched_wav;
   Sound word_matched;
