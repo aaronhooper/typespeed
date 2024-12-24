@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../word.h"
+#include "../components/word.h"
 
 typedef struct SceneGameplayObject {
   char *player_input;

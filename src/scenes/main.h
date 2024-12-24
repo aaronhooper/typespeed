@@ -1,19 +1,7 @@
-#include "raylib.h"
+#pragma once
 
-typedef struct Title {
-  const char *text;
-  int font_size;
-  int x;
-  int y;
-} Title;
-
-typedef struct PlayButton {
-  const char *text;
-  int font_size;
-  Color color;
-  int x;
-  int y;
-} PlayButton;
+#include "components/title.h"
+#include "components/play_button.h"
 
 typedef struct SceneMainObject {
   Title *title;

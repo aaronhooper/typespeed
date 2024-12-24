@@ -1,6 +1,6 @@
 #include "gameplay.h"
+#include "../components/player_input.h"
 #include "../config.h"
-#include "../player_input.h"
 #include "../util.h"
 
 #include <stdlib.h>

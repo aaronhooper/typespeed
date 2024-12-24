@@ -5,12 +5,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SOURCES
   src/typespeed.c
   src/dict.c
-  src/player_input.c
   src/scene.c
   src/util.c
-  src/word.c
   src/scenes/gameplay.c
   src/scenes/main.c
+  src/components/title.c
+  src/components/play_button.c
+  src/components/player_input.c
+  src/components/word.c
 )
 add_executable(${PROJECT_NAME} ${SOURCES})
 file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
@@ -20,6 +22,7 @@ target_include_directories(${PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/scenes
+    ${CMAKE_SOURCE_DIR}/src/components
 )
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
