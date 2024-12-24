@@ -1,4 +1,5 @@
 #include "main.h"
+#include "title.h"
 
 #include <stdlib.h>
 
@@ -17,6 +18,7 @@ void scene_main_free(SceneMainObject *object) {
 }
 
 void scene_main_update(SceneMainObject *scene) {
+  title_update(scene->title);
   play_button_update(scene->play_button);
 }
 
