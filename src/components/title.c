@@ -40,7 +40,7 @@ Title *title_create() {
   title->anim_time_next_char = ANIM_TIME_NEXT_CHAR;
   title->anim_time_char_change = ANIM_TIME_CHAR_CHANGE;
   title->anim_random_char = 'a';
-  title->anim_text = malloc(sizeof(title->text));
+  title->anim_text = calloc(strlen(title->text), sizeof(char));
 
   return title;
 }
@@ -51,10 +51,14 @@ void title_free(Title *title) {
 }
 
 void title_update(Title *title) {
+  size_t text_len = strlen(title->text);
+
+  if (title->text_hidden == text_len) {
+    return;
+  }
+
   strncpy(title->anim_text, title->text, title->text_hidden);
   title->anim_text[title->text_hidden] = title->anim_random_char;
-
-  size_t text_len = strlen(title->text);
 
   if (title->text_hidden == text_len) {
     return;
@@ -70,7 +74,7 @@ void title_update(Title *title) {
   }
 
   if (title->text_hidden == text_len) {
-    title->anim_text[text_len] = title->text[text_len];
+    title->anim_text[text_len - 1] = title->text[text_len - 1];
     return;
   }
 
