@@ -5,6 +5,7 @@
 
 typedef struct Title {
   const char *text;
+  size_t text_len;
   int font_size;
   int x;
   int y;

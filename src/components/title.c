@@ -15,6 +15,7 @@ static const size_t alpha_size = 66;
 Title *title_create() {
   Title *title = malloc(sizeof(Title));
   title->text = WINDOW_TITLE;
+  title->text_len = strlen(title->text);
   title->font_size = 48;
 
   // position title at the screen center
@@ -31,7 +32,7 @@ Title *title_create() {
   title->anim_time_next_char = ANIM_TIME_NEXT_CHAR;
   title->anim_time_char_change = ANIM_TIME_CHAR_CHANGE;
   title->anim_random_char = 'a';
-  title->anim_text = calloc(strlen(title->text), sizeof(char));
+  title->anim_text = calloc(title->text_len, sizeof(char));
 
   return title;
 }
@@ -42,18 +43,12 @@ void title_free(Title *title) {
 }
 
 void title_update(Title *title) {
-  size_t text_len = strlen(title->text);
-
-  if (title->text_hidden == text_len) {
+  if (title->text_hidden == title->text_len) {
     return;
   }
 
   strncpy(title->anim_text, title->text, title->text_hidden);
   title->anim_text[title->text_hidden] = title->anim_random_char;
-
-  if (title->text_hidden == text_len) {
-    return;
-  }
 
   float dt = GetFrameTime();
   title->anim_time_next_char -= dt;
@@ -64,8 +59,8 @@ void title_update(Title *title) {
     ++(title->text_hidden);
   }
 
-  if (title->text_hidden == text_len) {
-    title->anim_text[text_len - 1] = title->text[text_len - 1];
+  if (title->text_hidden == title->text_len) {
+    title->anim_text[title->text_len - 1] = title->text[title->text_len - 1];
     return;
   }
 
