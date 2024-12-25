@@ -6,24 +6,14 @@
 PlayButton *play_button_create() {
   PlayButton *button = malloc(sizeof(PlayButton));
 
-  int screen_center_x = GetScreenWidth() / 2;
-  int screen_center_y = GetScreenHeight() / 2;
-
-  int play_button_x = screen_center_x;
-  int play_button_y = screen_center_y;
-
   button->text = "play";
   button->font_size = 36;
 
-  // subtract text midpoint from x and y pos of text to
-  // get the centered position
+  // position button 100 pixels south of the screen center
   int play_button_width = MeasureText(button->text, button->font_size);
   int play_button_height = button->font_size;
-  play_button_x = play_button_x - (play_button_width / 2);
-  play_button_y = play_button_y - (play_button_height / 2);
-
-  // move button down
-  play_button_y += 100;
+  int play_button_x = (GetScreenWidth() / 2) - (play_button_width / 2);
+  int play_button_y = (GetScreenHeight() / 2) - (play_button_height / 2) + 100;
 
   button->x = play_button_x;
   button->y = play_button_y;
