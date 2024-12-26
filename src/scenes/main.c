@@ -2,26 +2,12 @@
 #include "memory/arena.h"
 #include "title.h"
 
-#include <stdlib.h>
-
-SceneMainObject *scene_main_create() {
-  SceneMainObject *object = malloc(sizeof(SceneMainObject));
-  Arena arena = {0};
-
-  if (arena_init(&arena, 1024) == NULL) {
-    return NULL;
-  }
-
-  object->arena = arena;
-  object->title = title_create(&arena);
-  object->play_button = play_button_create(&arena);
+SceneMainObject *scene_main_create(Arena *arena) {
+  SceneMainObject *object = arena_alloc(arena, sizeof(SceneMainObject));
+  object->title = title_create(arena);
+  object->play_button = play_button_create(arena);
 
   return object;
-}
-
-void scene_main_free(SceneMainObject *object) {
-  arena_free(&object->arena);
-  free(object);
 }
 
 void scene_main_update(SceneMainObject *scene) {

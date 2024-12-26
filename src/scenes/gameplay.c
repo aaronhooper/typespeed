@@ -6,31 +6,18 @@
 #include "util.h"
 #include "word.h"
 
-#include <stdlib.h>
-
-SceneGameplayObject *scene_gameplay_create() {
-  SceneGameplayObject *object = malloc(sizeof(SceneGameplayObject));
-  Arena arena = {0};
-  if (arena_init(&arena, 4096) == NULL) {
-    return NULL;
-  }
+SceneGameplayObject *scene_gameplay_create(Arena *arena) {
+  SceneGameplayObject *object = arena_alloc(arena, sizeof(SceneGameplayObject));
 
   Slab slab = {0};
-  slab_init(&slab, &arena, sizeof(Word), 20);
+  slab_init(&slab, arena, sizeof(Word), 20);
 
-  object->arena = arena;
   object->words_slab = slab;
-  object->player_input = player_input_create(&arena);
-  object->words = words_create(&arena, &slab, 20);
+  object->player_input = player_input_create(arena);
+  object->words = words_create(arena, &slab, 20);
   object->score = 0;
 
   return object;
-}
-
-void scene_gameplay_free(SceneGameplayObject *object) {
-  arena_free(&object->arena);
-  free(object);
-  object = NULL;
 }
 
 void scene_gameplay_update(SceneGameplayObject *scene) {

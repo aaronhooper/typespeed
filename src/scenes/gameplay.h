@@ -4,14 +4,12 @@
 #include "player_input.h"
 
 typedef struct SceneGameplayObject {
-  Arena arena;
   PlayerInput player_input;
   Word *words;
   Slab words_slab;
   int score;
 } SceneGameplayObject;
 
-SceneGameplayObject *scene_gameplay_create();
-void scene_gameplay_free(SceneGameplayObject *object);
+SceneGameplayObject *scene_gameplay_create(Arena *arena);
 void scene_gameplay_update(SceneGameplayObject *scene);
 void scene_gameplay_draw(SceneGameplayObject *scene);
