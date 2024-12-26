@@ -3,21 +3,28 @@
 #include "../config.h"
 #include "../util.h"
 #include "memory/arena.h"
+#include "memory/slab.h"
+#include "word.h"
 
 #include <stdlib.h>
 
 SceneGameplayObject *scene_gameplay_create() {
   SceneGameplayObject *object = malloc(sizeof(SceneGameplayObject));
   Arena arena = {0};
-  if (arena_init(&arena, 1024) == NULL) {
+  if (arena_init(&arena, 4096) == NULL) {
     return NULL;
   }
+
+  Slab slab = {0};
+  slab_init(&slab, &arena, sizeof(Word), 20);
+
   object->arena = arena;
+  object->words_slab = slab;
   object->player_input = player_input_create(&arena);
   object->word_matched_wav = LoadWave("assets/word_matched.wav");
   object->word_matched = LoadSoundFromWave(object->word_matched_wav);
   object->dict = dict_load(WORDLIST_FILE);
-  object->words = words_create(&object->dict, 20);
+  object->words = words_create(&arena, &slab, &object->dict, 20);
   object->score = 0;
 
   return object;
@@ -25,7 +32,6 @@ SceneGameplayObject *scene_gameplay_create() {
 
 void scene_gameplay_free(SceneGameplayObject *object) {
   arena_free(&object->arena);
-  words_free(object->words);
   UnloadSound(object->word_matched);
   UnloadWave(object->word_matched_wav);
   dict_free(object->dict);
@@ -41,7 +47,8 @@ void scene_gameplay_update(SceneGameplayObject *scene) {
       player_input_push_key(&scene->player_input, (char)keycode + 32);
     }
 
-    if (words_remove(&scene->words, scene->player_input.buffer)) {
+    if (words_remove(&scene->words_slab, &scene->words,
+                     scene->player_input.buffer)) {
       PlaySound(scene->word_matched);
       player_input_clear(&scene->player_input);
       ++scene->score;

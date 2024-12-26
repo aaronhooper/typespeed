@@ -1,5 +1,7 @@
 #include "word.h"
 #include "config.h"
+#include "memory/arena.h"
+#include "memory/slab.h"
 #include "raylib.h"
 
 #include <assert.h>
@@ -7,8 +9,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-Word *word_create(char *text, float x, float y) {
-  Word *word = malloc(sizeof(Word));
+Word *word_create(Slab *slab, char *text, float x, float y) {
+  Word *word;
+
+  if ((word = slab_alloc(slab)) == NULL) {
+    return NULL;
+  }
+
   word->text = text;
   word->pos.x = x;
   word->pos.y = y;
@@ -17,53 +24,46 @@ Word *word_create(char *text, float x, float y) {
   return word;
 }
 
-Word *word_create_random(Dict *dict) {
+Word *word_create_random(Slab *slab, Dict *dict) {
   char *rand_word = dict->words[GetRandomValue(0, dict->size - 1)];
   float rand_x = GetRandomValue(0, GetScreenWidth());
   float rand_y = GetRandomValue(0, GetScreenHeight());
 
-  return word_create(rand_word, rand_x, rand_y);
+  return word_create(slab, rand_word, rand_x, rand_y);
 }
 
-Word *words_create(Dict *dict, int n) {
+Word *words_create(Arena *arena, Slab *slab, Dict *dict, int n) {
   assert(n > 0);
 
-  Word *head = word_create_random(dict);
+  if (slab_init(slab, arena, sizeof(Word), n) == NULL) {
+    return NULL;
+  }
+
+  Word *head = word_create_random(slab, dict);
   Word *curr = head;
 
   for (int i = 0; i < n - 1; ++i) {
-    curr->next = word_create_random(dict);
+    curr->next = word_create_random(slab, dict);
     curr = curr->next;
   }
 
   return head;
 }
 
-void words_free(Word *head) {
-  Word *curr = head;
-  Word *next;
-
-  while (curr != NULL) {
-    next = curr->next;
-    free(curr);
-    curr = next;
-  }
-}
-
-Word *words_add_random(Word *word, Dict *dict) {
-  Word *new = word_create_random(dict);
+Word *words_add_random(Slab *slab, Word *word, Dict *dict) {
+  Word *new = word_create_random(slab, dict);
   new->next = word;
 
   return new;
 }
 
-bool words_remove(Word **word, const char *match) {
+bool words_remove(Slab *slab, Word **word, const char *match) {
   Word *head = *word, *curr = *word, *prev;
   bool is_match = strncmp(curr->text, match, MAX_WORD_LENGTH) == 0;
 
   if (is_match) {
     *word = curr->next;
-    free(curr);
+    slab_free(slab, curr);
     return true;
   }
 
@@ -75,7 +75,7 @@ bool words_remove(Word **word, const char *match) {
     if (is_match) {
       prev->next = curr->next;
       *word = head;
-      free(curr);
+      slab_free(slab, curr);
       return true;
     }
   }
@@ -108,14 +108,4 @@ void words_foreach(Word *words, void (*fn)(Word *)) {
 
 void word_print(Word *word) { printf("%s\n", word->text); }
 
-size_t words_len(Word *words) {
-  Word *curr = words;
-  size_t len = 0;
-
-  while (curr != NULL) {
-    len++;
-    curr = curr->next;
-  }
-
-  return len;
-}
+size_t words_len(Slab *slab) { return slab->size; }

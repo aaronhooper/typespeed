@@ -7,6 +7,7 @@ typedef struct SceneGameplayObject {
   Arena arena;
   PlayerInput player_input;
   Word *words;
+  Slab words_slab;
   Wave word_matched_wav;
   Sound word_matched;
   Dict dict;
