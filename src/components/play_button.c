@@ -1,10 +1,8 @@
 #include "play_button.h"
 #include "scene.h"
 
-#include <stdlib.h>
-
-PlayButton *play_button_create() {
-  PlayButton *button = malloc(sizeof(PlayButton));
+PlayButton *play_button_create(Arena *arena) {
+  PlayButton *button = arena_alloc(arena, sizeof(PlayButton));
 
   button->text = "play";
   button->font_size = 36;
@@ -24,8 +22,6 @@ PlayButton *play_button_create() {
 
   return button;
 }
-
-void play_button_free(PlayButton *button) { free(button); }
 
 void play_button_update(PlayButton *button) {
   int xstart = button->x;

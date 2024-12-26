@@ -1,5 +1,6 @@
 #pragma once
 
+#include "memory/arena.h"
 #include "raylib.h"
 
 typedef struct PlayButton {
@@ -10,7 +11,6 @@ typedef struct PlayButton {
   int y;
 } PlayButton;
 
-PlayButton *play_button_create();
-void play_button_free(PlayButton *button);
+PlayButton *play_button_create(Arena *arena);
 void play_button_update(PlayButton *button);
 void play_button_draw(PlayButton *button);

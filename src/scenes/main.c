@@ -14,13 +14,12 @@ SceneMainObject *scene_main_create() {
 
   object->arena = arena;
   object->title = title_create(&arena);
-  object->play_button = play_button_create();
+  object->play_button = play_button_create(&arena);
 
   return object;
 }
 
 void scene_main_free(SceneMainObject *object) {
-  play_button_free(object->play_button);
   arena_free(&object->arena);
   free(object);
 }
