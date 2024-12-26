@@ -1,5 +1,6 @@
 #include "title.h"
 #include "config.h"
+#include "memory/arena.h"
 #include "raylib.h"
 
 #include <stdlib.h>
@@ -12,8 +13,8 @@ static const char *alpha =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@£$%^&*()-=_+";
 static const size_t alpha_size = 66;
 
-Title *title_create() {
-  Title *title = malloc(sizeof(Title));
+Title *title_create(Arena *arena) {
+  Title *title = arena_alloc(arena, sizeof(Title));
   title->text = WINDOW_TITLE;
   title->text_len = strlen(title->text);
   title->font_size = 48;
@@ -31,14 +32,10 @@ Title *title_create() {
   title->anim_time_next_char = ANIM_TIME_NEXT_CHAR;
   title->anim_time_char_change = ANIM_TIME_CHAR_CHANGE;
   title->anim_random_char = 'a';
-  title->anim_text = calloc(title->text_len, sizeof(char));
+  title->anim_text = arena_alloc(arena, title->text_len * sizeof(char));
+  memset(title->anim_text, 0, title->text_len);
 
   return title;
-}
-
-void title_free(Title *title) {
-  free(title->anim_text);
-  free(title);
 }
 
 void title_animate_typing(Title *title) {

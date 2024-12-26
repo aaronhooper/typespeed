@@ -1,5 +1,7 @@
 #pragma once
 
+#include "memory/arena.h"
+
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -17,7 +19,6 @@ typedef struct Title {
   char *anim_text;
 } Title;
 
-Title *title_create();
-void title_free(Title *title);
+Title *title_create(Arena *arena);
 void title_update(Title *title);
 void title_draw(Title *title);

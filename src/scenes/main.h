@@ -6,6 +6,7 @@
 typedef struct SceneMainObject {
   Title *title;
   PlayButton *play_button;
+  Arena arena;
 } SceneMainObject;
 
 SceneMainObject *scene_main_create();
