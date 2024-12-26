@@ -8,6 +8,7 @@ set(SOURCES
   src/scene.c
   src/util.c
   src/memory/arena.c
+  src/assets.c
   src/memory/slab.c
   src/scenes/gameplay.c
   src/scenes/main.c

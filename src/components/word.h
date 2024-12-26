@@ -1,6 +1,5 @@
 #pragma once
 
-#include "dict.h"
 #include "memory/arena.h"
 #include "memory/slab.h"
 #include "raylib.h"
@@ -16,11 +15,11 @@ struct Word {
 };
 
 Word *word_create(Slab *slab, char *text, float x, float y);
-Word *word_create_random(Slab *slab, Dict *dict);
+Word *word_create_random(Slab *slab);
 void word_print(Word *word);
 
-Word *words_create(Arena *arena, Slab *slab, Dict *dict, int n);
-Word *words_add_random(Slab *slab, Word *word, Dict *dict);
+Word *words_create(Arena *arena, Slab *slab, int n);
+Word *words_add_random(Slab *slab, Word *word);
 bool words_remove(Slab *slab, Word **word, const char *match);
 void words_update(Word *words);
 void words_draw(Word *words);

@@ -1,4 +1,5 @@
 #include "word.h"
+#include "assets.h"
 #include "config.h"
 #include "memory/arena.h"
 #include "memory/slab.h"
@@ -24,34 +25,36 @@ Word *word_create(Slab *slab, char *text, float x, float y) {
   return word;
 }
 
-Word *word_create_random(Slab *slab, Dict *dict) {
-  char *rand_word = dict->words[GetRandomValue(0, dict->size - 1)];
+Word *word_create_random(Slab *slab) {
+  Assets *assets = assets_get();
+  char *rand_word =
+      assets->dict.words[GetRandomValue(0, assets->dict.size - 1)];
   float rand_x = GetRandomValue(0, GetScreenWidth());
   float rand_y = GetRandomValue(0, GetScreenHeight());
 
   return word_create(slab, rand_word, rand_x, rand_y);
 }
 
-Word *words_create(Arena *arena, Slab *slab, Dict *dict, int n) {
+Word *words_create(Arena *arena, Slab *slab, int n) {
   assert(n > 0);
 
   if (slab_init(slab, arena, sizeof(Word), n) == NULL) {
     return NULL;
   }
 
-  Word *head = word_create_random(slab, dict);
+  Word *head = word_create_random(slab);
   Word *curr = head;
 
   for (int i = 0; i < n - 1; ++i) {
-    curr->next = word_create_random(slab, dict);
+    curr->next = word_create_random(slab);
     curr = curr->next;
   }
 
   return head;
 }
 
-Word *words_add_random(Slab *slab, Word *word, Dict *dict) {
-  Word *new = word_create_random(slab, dict);
+Word *words_add_random(Slab *slab, Word *word) {
+  Word *new = word_create_random(slab);
   new->next = word;
 
   return new;
