@@ -1,13 +1,13 @@
 #include "player_input.h"
 #include "config.h"
+#include "memory/arena.h"
 #include "raylib.h"
 
-#include <stdlib.h>
 #include <string.h>
 
-PlayerInput player_input_create() {
-  // just assume we can alloc 20 bytes
-  char *buffer = calloc(MAX_WORD_LENGTH, sizeof(char));
+PlayerInput player_input_create(Arena *arena) {
+  char *buffer = arena_alloc(arena, MAX_WORD_LENGTH * sizeof(char));
+  memset(buffer, 0, MAX_WORD_LENGTH);
 
   PlayerInput player_input = {
       .buffer = buffer,
@@ -16,11 +16,6 @@ PlayerInput player_input_create() {
   };
 
   return player_input;
-}
-
-void player_input_free(PlayerInput *player_input) {
-  free(player_input->buffer);
-  memset(player_input, 0, sizeof(PlayerInput));
 }
 
 void player_input_push_key(PlayerInput *player_input, char key) {

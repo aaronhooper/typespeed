@@ -4,6 +4,7 @@
 #include "player_input.h"
 
 typedef struct SceneGameplayObject {
+  Arena arena;
   PlayerInput player_input;
   Word *words;
   Wave word_matched_wav;

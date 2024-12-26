@@ -26,6 +26,14 @@ void *arena_alloc(Arena *arena, size_t requested_size) {
       new_capacity *= 2;
     } while (arena->size + requested_size >= new_capacity);
 
+    // TODO
+    // we can't use realloc here. there is a chance that realloc will copy
+    // existing memory to a new location, which will invalidate any allocated
+    // pointers.
+    //
+    // alternatives:
+    //   - use mmap to reserve a large virtual size (platform dependent)
+    //   - use linked list of blocks to avoid realloc
     void *new_buffer = realloc(arena->buffer, new_capacity * sizeof(char));
 
     if (new_buffer == NULL) {

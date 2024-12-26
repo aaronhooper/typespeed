@@ -2,12 +2,18 @@
 #include "../components/player_input.h"
 #include "../config.h"
 #include "../util.h"
+#include "memory/arena.h"
 
 #include <stdlib.h>
 
 SceneGameplayObject *scene_gameplay_create() {
   SceneGameplayObject *object = malloc(sizeof(SceneGameplayObject));
-  object->player_input = player_input_create();
+  Arena arena = {0};
+  if (arena_init(&arena, 1024) == NULL) {
+    return NULL;
+  }
+  object->arena = arena;
+  object->player_input = player_input_create(&arena);
   object->word_matched_wav = LoadWave("assets/word_matched.wav");
   object->word_matched = LoadSoundFromWave(object->word_matched_wav);
   object->dict = dict_load(WORDLIST_FILE);
@@ -18,7 +24,7 @@ SceneGameplayObject *scene_gameplay_create() {
 }
 
 void scene_gameplay_free(SceneGameplayObject *object) {
-  player_input_free(&object->player_input);
+  arena_free(&object->arena);
   words_free(object->words);
   UnloadSound(object->word_matched);
   UnloadWave(object->word_matched_wav);
