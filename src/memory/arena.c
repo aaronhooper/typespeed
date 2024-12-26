@@ -4,7 +4,7 @@
 #include <string.h>
 
 void *arena_init(Arena *arena, size_t capacity) {
-  void *buffer = malloc(capacity);
+  void *buffer = malloc(capacity * sizeof(char));
 
   if (buffer == NULL) {
     return NULL;
@@ -26,7 +26,7 @@ void *arena_alloc(Arena *arena, size_t requested_size) {
       new_capacity *= 2;
     } while (arena->size + requested_size >= new_capacity);
 
-    void *new_buffer = realloc(arena->buffer, new_capacity);
+    void *new_buffer = realloc(arena->buffer, new_capacity * sizeof(char));
 
     if (new_buffer == NULL) {
       return NULL;

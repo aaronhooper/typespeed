@@ -32,8 +32,8 @@ Title *title_create(Arena *arena) {
   title->anim_time_next_char = ANIM_TIME_NEXT_CHAR;
   title->anim_time_char_change = ANIM_TIME_CHAR_CHANGE;
   title->anim_random_char = 'a';
-  title->anim_text = arena_alloc(arena, title->text_len * sizeof(char));
-  memset(title->anim_text, 0, title->text_len);
+  title->anim_text = arena_alloc(arena, (title->text_len + 1) * sizeof(char));
+  memset(title->anim_text, 0, title->text_len + 1);
 
   return title;
 }
