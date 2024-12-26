@@ -26,7 +26,6 @@ Title *title_create() {
 
   title->x = title_x;
   title->y = title_y;
-
   title->is_animating = true;
   title->text_hidden = 0;
   title->anim_time_next_char = ANIM_TIME_NEXT_CHAR;
@@ -42,11 +41,7 @@ void title_free(Title *title) {
   free(title);
 }
 
-void title_update(Title *title) {
-  if (title->text_hidden == title->text_len) {
-    return;
-  }
-
+void title_animate_typing(Title *title) {
   strncpy(title->anim_text, title->text, title->text_hidden);
   title->anim_text[title->text_hidden] = title->anim_random_char;
 
@@ -56,17 +51,24 @@ void title_update(Title *title) {
 
   if (title->anim_time_next_char < 0) {
     title->anim_time_next_char += ANIM_TIME_NEXT_CHAR;
-    ++(title->text_hidden);
+    title->text_hidden++;
   }
 
   if (title->text_hidden == title->text_len) {
     title->anim_text[title->text_len - 1] = title->text[title->text_len - 1];
+    title->is_animating = false;
     return;
   }
 
   if (title->anim_time_char_change < 0) {
     title->anim_time_char_change = ANIM_TIME_CHAR_CHANGE;
     title->anim_random_char = alpha[rand() % alpha_size];
+  }
+}
+
+void title_update(Title *title) {
+  if (title->is_animating) {
+    title_animate_typing(title);
   }
 }
 
