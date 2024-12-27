@@ -15,7 +15,7 @@ Scene scene_get() { return _scene_type; }
 
 void scene_set(Scene scene) {
   if (!_is_initialized) {
-    arena_init(&_scene_arena, 1024 * 1024);
+    arena_init(&_scene_arena, 1024 * 1024 * 1024);
     _is_initialized = true;
   }
 
