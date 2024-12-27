@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/word.h"
-#include "player_input.h"
+#include "components/player_input.h"
 
 typedef struct SceneGameplayObject {
   PlayerInput player_input;

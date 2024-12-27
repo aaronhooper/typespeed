@@ -1,4 +1,4 @@
-#include "arena.h"
+#include "memory/arena.h"
 #include "munit/munit.h"
 
 void test_pointers_exist_after_realloc() {

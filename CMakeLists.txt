@@ -24,8 +24,6 @@ target_include_directories(${PROJECT_NAME}
   PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/scenes
-    ${CMAKE_SOURCE_DIR}/src/components
 )
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
@@ -50,7 +48,7 @@ enable_testing()
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE}
   PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/memory
+    ${CMAKE_SOURCE_DIR}/src
 )
 target_compile_options(${TEST_EXECUTABLE} PRIVATE -Wall -Wextra -g -fsanitize=address)
 target_link_options(${TEST_EXECUTABLE} PRIVATE -Wall -Wextra -g -fsanitize=address)

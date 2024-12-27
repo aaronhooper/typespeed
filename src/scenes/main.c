@@ -1,6 +1,6 @@
 #include "main.h"
+#include "components/title.h"
 #include "memory/arena.h"
-#include "title.h"
 
 SceneMainObject *scene_main_create(Arena *arena) {
   SceneMainObject *object = arena_alloc(arena, sizeof(SceneMainObject));

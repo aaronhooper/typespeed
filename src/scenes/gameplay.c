@@ -1,10 +1,10 @@
 #include "gameplay.h"
 #include "assets.h"
 #include "components/player_input.h"
+#include "components/word.h"
 #include "memory/arena.h"
 #include "memory/slab.h"
 #include "util.h"
-#include "word.h"
 
 SceneGameplayObject *scene_gameplay_create(Arena *arena) {
   SceneGameplayObject *object = arena_alloc(arena, sizeof(SceneGameplayObject));
