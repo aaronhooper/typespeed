@@ -24,3 +24,13 @@ cmake --build build
 ```bash
 build/typespeed
 ```
+
+## Testing
+
+```bash
+build/tests
+# -- OR --
+cd build
+ctest
+```
+
