@@ -39,3 +39,19 @@ if(APPLE)
       "-framework OpenGL"
   )
 endif()
+
+set(TEST_EXECUTABLE tests)
+set(TEST_SOURCES
+  test/test.c
+  test/munit/munit.c
+  src/memory/arena.c
+)
+enable_testing()
+add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
+target_include_directories(${TEST_EXECUTABLE}
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/memory
+)
+target_compile_options(${TEST_EXECUTABLE} PRIVATE -Wall -Wextra -g -fsanitize=address)
+target_link_options(${TEST_EXECUTABLE} PRIVATE -Wall -Wextra -g -fsanitize=address)
+add_test(NAME test_c COMMAND ${TEST_EXECUTABLE})
