@@ -2,9 +2,12 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 
 void *arena_init(Arena *arena, size_t capacity) {
-  void *buffer = malloc(capacity * sizeof(char));
+  void *buffer =
+      mmap(NULL, capacity * sizeof(unsigned char), PROT_READ | PROT_WRITE,
+           MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
   if (buffer == NULL) {
     return NULL;
@@ -18,33 +21,7 @@ void *arena_init(Arena *arena, size_t capacity) {
 }
 
 void *arena_alloc(Arena *arena, size_t requested_size) {
-  if (arena->size + requested_size >= arena->capacity) {
-    size_t new_capacity = arena->capacity;
-
-    // double the size of the buffer until it can hold the requested size
-    do {
-      new_capacity *= 2;
-    } while (arena->size + requested_size >= new_capacity);
-
-    // TODO
-    // we can't use realloc here. there is a chance that realloc will copy
-    // existing memory to a new location, which will invalidate any allocated
-    // pointers.
-    //
-    // alternatives:
-    //   - use mmap to reserve a large virtual size (platform dependent)
-    //   - use linked list of blocks to avoid realloc
-    void *new_buffer = realloc(arena->buffer, new_capacity * sizeof(char));
-
-    if (new_buffer == NULL) {
-      return NULL;
-    }
-
-    arena->buffer = new_buffer;
-    arena->capacity = new_capacity;
-  }
-
-  void *ptr = (char *)arena->buffer + arena->size;
+  void *ptr = (unsigned char *)arena->buffer + arena->size;
   arena->size += requested_size;
   return ptr;
 }
@@ -52,6 +29,6 @@ void *arena_alloc(Arena *arena, size_t requested_size) {
 void arena_flush(Arena *arena) { arena->size = 0; }
 
 void arena_free(Arena *arena) {
-  free(arena->buffer);
+  munmap(arena->buffer, arena->capacity);
   memset(arena, 0, sizeof(Arena));
 }
