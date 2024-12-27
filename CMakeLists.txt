@@ -2,21 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(typespeed C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(SOURCES
-  src/typespeed.c
-  src/dict.c
-  src/scene.c
-  src/util.c
-  src/memory/arena.c
-  src/assets.c
-  src/memory/slab.c
-  src/scenes/gameplay.c
-  src/scenes/main.c
-  src/components/title.c
-  src/components/play_button.c
-  src/components/player_input.c
-  src/components/word.c
-)
+file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 add_executable(${PROJECT_NAME} ${SOURCES})
 file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -g)
