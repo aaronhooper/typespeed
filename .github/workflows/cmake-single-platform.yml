@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# Allow the workflow to create releases and upload assets
+permissions:
+  contents: write
+
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -34,6 +38,77 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      # https://cmake.org/cmake/help/latest/manual/ctest.1.html
       run: ctest -C ${{env.BUILD_TYPE}}
 
+    # Upload the built executable as an artifact for the release job to consume.
+    - name: Package macOS executable for upload
+      run: |
+        set -eu
+        mkdir -p "$GITHUB_WORKSPACE/artifacts"
+        cp "$GITHUB_WORKSPACE/build/typespeed" "$GITHUB_WORKSPACE/artifacts/typespeed-macos-executable"
+        ls -l "$GITHUB_WORKSPACE/artifacts"
+    - name: Upload macOS executable artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-executable
+        path: artifacts/typespeed-macos-executable
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    # Only create a release for direct pushes to main (not PRs)
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+    - name: Checkout repository (for creating source tarball)
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download macOS executable artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: macos-executable
+        path: downloaded-artifacts
+
+    - name: Create source tarball
+      run: |
+        set -eu
+        # Create a tar.gz of the repository contents (exclude the .git directory)
+        TAR_NAME="typespeed-source-${{ github.sha }}.tar.gz"
+        tar --exclude='.git' -czf "$TAR_NAME" -C "$GITHUB_WORKSPACE" .
+        echo "Created $TAR_NAME"
+      shell: bash
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        body: |
+          Automated release created after successful CI run ${{ github.run_id }} on branch ${{ github.ref_name }}.
+        draft: false
+        prerelease: false
+
+    - name: Upload source tarball to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: typespeed-source-${{ github.sha }}.tar.gz
+        asset_name: typespeed-source-${{ github.sha }}.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload macOS executable to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: downloaded-artifacts/typespeed-macos-executable
+        asset_name: typespeed-macos-{{ runner.os }}-executable
+        asset_content_type: application/octet-stream
