@@ -76,7 +76,7 @@ jobs:
         set -eu
         # Create a tar.gz of the repository contents (exclude the .git directory)
         TAR_NAME="typespeed-source-${{ github.sha }}.tar.gz"
-        tar --exclude='.git' -czf "$TAR_NAME" -C "$GITHUB_WORKSPACE" .
+        tar --exclude='.git' --exclude="$TAR_NAME" -czf "$TAR_NAME" -C "$GITHUB_WORKSPACE" .
         echo "Created $TAR_NAME"
       shell: bash
 
