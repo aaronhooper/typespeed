@@ -69,14 +69,14 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: macos-executable
-        path: downloaded-artifacts
+        path: ${{ runner.temp }}/artifacts
 
     - name: Create source tarball
       run: |
         set -eu
         # Create a tar.gz of the repository contents (exclude the .git directory)
         TAR_NAME="typespeed-source-${{ github.sha }}.tar.gz"
-        tar --exclude='.git' --exclude="$TAR_NAME" -czf "$TAR_NAME" -C "$GITHUB_WORKSPACE" .
+        tar --exclude='.git' -czf "$RUNNER_TEMP/artifacts/$TAR_NAME" -C "$GITHUB_WORKSPACE" .
         echo "Created $TAR_NAME"
       shell: bash
 
@@ -99,7 +99,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: typespeed-source-${{ github.sha }}.tar.gz
+        asset_path: ${{ runner.temp }}/artifacts/typespeed-source-${{ github.sha }}.tar.gz
         asset_name: typespeed-source-${{ github.sha }}.tar.gz
         asset_content_type: application/gzip
 
@@ -109,6 +109,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: downloaded-artifacts/typespeed-macos-executable
+        asset_path: ${{ runner.temp }}/artifacts/typespeed-macos-executable
         asset_name: typespeed-macos-{{ runner.os }}-executable
         asset_content_type: application/octet-stream
